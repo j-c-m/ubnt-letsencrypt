@@ -24,30 +24,30 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/script
   * eth0 - WAN device
 
 1. Set listen address for gui to LAN IP.
-```
-set service gui listen-address 192.168.1.1
-```
+    ```
+    set service gui listen-address 192.168.1.1
+    ```
 2. Setup static host mapping for FQDN to the LAN IP.
-```
-set system static-host-mapping host-name subdomain.example.com inet 192.168.1.1
-```
+    ```
+    set system static-host-mapping host-name subdomain.example.com inet 192.168.1.1
+    ```
 3. Configure cert-file location for gui.
-```
-set service gui cert-file /config/ssl/server.pem
-```
+    ```
+    set service gui cert-file /config/ssl/server.pem
+    ```
 4. Configure task scheduler to renew certificate automatically.
-```
-set system task-scheduler task renew.acme executable path /config/scripts/renew.acme.sh
-set system task-scheduler task renew.acme interval 1d
-set system task-scheduler task renew.acme executable arguments 'subdomain.example.com eth0'
-```
+    ```
+    set system task-scheduler task renew.acme executable path /config/scripts/renew.acme.sh
+    set system task-scheduler task renew.acme interval 1d
+    set system task-scheduler task renew.acme executable arguments 'subdomain.example.com eth0'
+    ```
 5. Initialize your certificate.
-```
-sudo /config/scripts/renew.acme.sh subdomain.example.com eth0
-```
+    ```
+    sudo /config/scripts/renew.acme.sh subdomain.example.com eth0
+    ```
 6. Commit and save your configuration.
-```
-commit
-save
-```
+    ```
+    commit
+    save
+    ```
 7. Accesss your router by going to <https://subdomain.example.com>
