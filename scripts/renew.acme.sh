@@ -16,14 +16,15 @@ while getopts "hd:i:" opt; do
 done
 shift $((OPTIND -1))
 
+# check for required parameters
+if [ ${#DOMAIN[@]} -eq 0 ] || [ -z ${WAN+x} ]; then
+    usage
+fi 
+
 # prepare our domain flags for acme.sh
 for val in "${DOMAIN[@]}"; do
      DOMAINARG+="-d $val "
 done
-
-if [ ${#DOMAIN[@]} -eq 0 ] || [ -z ${WAN+x} ]; then
-    usage
-fi 
 
 ACMEHOME=/config/.acme.sh
 WANIP=$(ip addr show $WAN | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
