@@ -47,14 +47,23 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/script
     ```
     set system task-scheduler task renew.acme executable path /config/scripts/renew.acme.sh
     set system task-scheduler task renew.acme interval 1d
-    set system task-scheduler task renew.acme executable arguments 'subdomain.example.com eth0'
+    set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -i eth0'
+    ```
+
+If you'd prefer, you can additional common names for your certificate, so long as they resolve to the same WAN address:
+
+    ```
+    set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -d subdomain2.example.com -i eth0'
     ```
 
 5. Initialize your certificate.
 
     ```
-    sudo /config/scripts/renew.acme.sh subdomain.example.com eth0
+    sudo /config/scripts/renew.acme.sh -d subdomain.example.com -i eth0
     ```
+
+If you included multiple names in step 4, you'll need to include any additional names here as well.
+
 6. Commit and save your configuration.
 
     ```
