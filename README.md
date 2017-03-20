@@ -50,7 +50,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/script
     set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -i eth0'
     ```
 
-    If you'd prefer, you can additional common names for your certificate, so long as they resolve to the same WAN address:
+    You can include additional common names for your certificate, so long as they resolve to the same WAN address:
 
     ```
     set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -d subdomain2.example.com -i eth0'
@@ -72,3 +72,10 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/script
     ```
 
 7. Accesss your router by going to <https://subdomain.example.com>
+
+## Changelog
+
+    20170320 - Add multiple name support
+    20170317 - Change from standalone to webroot auth using lighttpd
+    20170224 - Bug fixes
+    20170110 - Born

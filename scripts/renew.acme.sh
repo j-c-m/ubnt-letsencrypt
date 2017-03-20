@@ -19,7 +19,7 @@ shift $((OPTIND -1))
 # check for required parameters
 if [ ${#DOMAIN[@]} -eq 0 ] || [ -z ${WAN+x} ]; then
     usage
-fi 
+fi
 
 # prepare our domain flags for acme.sh
 for val in "${DOMAIN[@]}"; do
