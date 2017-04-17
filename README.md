@@ -24,25 +24,19 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/script
 * Configure DNS record for subdomain.example.com to your public WAN IP.
 * Connect via ssh to your EdgeRouter and enter configuration mode.
 
-1. Set listen address for gui to LAN IP.
-
-    ```
-    set service gui listen-address 192.168.1.1
-    ```
-
-2. Setup static host mapping for FQDN to the LAN IP.
+1. Setup static host mapping for FQDN to the LAN IP.
 
     ```
     set system static-host-mapping host-name subdomain.example.com inet 192.168.1.1
     ```
 
-3. Configure cert-file location for gui.
+2. Configure cert-file location for gui.
 
     ```
     set service gui cert-file /config/ssl/server.pem
     ```
 
-4. Configure task scheduler to renew certificate automatically.
+3. Configure task scheduler to renew certificate automatically.
 
     ```
     set system task-scheduler task renew.acme executable path /config/scripts/renew.acme.sh
@@ -56,7 +50,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/script
     set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -d subdomain2.example.com -i eth0'
     ```
 
-5. Initialize your certificate.
+4. Initialize your certificate.
 
     ```
     sudo /config/scripts/renew.acme.sh -d subdomain.example.com -i eth0
@@ -64,17 +58,18 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/script
 
     If you included multiple names in step 4, you'll need to include any additional names here as well.
 
-6. Commit and save your configuration.
+5. Commit and save your configuration.
 
     ```
     commit
     save
     ```
 
-7. Accesss your router by going to <https://subdomain.example.com>
+6. Accesss your router by going to <https://subdomain.example.com>
 
 ## Changelog
 
+    20170417 - Stop gui service during challenge
     20170320 - Add multiple name support
     20170317 - Change from standalone to webroot auth using lighttpd
     20170224 - Bug fixes

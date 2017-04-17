@@ -4,6 +4,23 @@ usage() {
     echo "Usage: $0 -d <mydomain.com> [-d <additionaldomain.com>] -i <wandev>" 1>&2; exit 1;
 }
 
+kill_and_wait() {
+    local pid=$1
+    [ -z $pid ] && return
+
+    kill -s INT $pid 2> /dev/null
+    while kill -s 0 $pid 2> /dev/null; do
+        sleep 1
+    done
+}
+
+log() {
+    if [ -z "$2" ]
+    then
+        printf -- "%s %s\n" "[$(date)]" "$1"
+    fi
+}
+
 # first parse our options
 while getopts "hd:i:" opt; do
     case $opt in
@@ -38,17 +55,29 @@ server.document-root = "$ACMEHOME/webroot"
 server.port = 80
 server.bind = "$WANIP"
 server.pid-file = "$ACMEHOME/lighttpd.pid"
+server.errorlog = "/dev/null"
 accesslog.filename = "$ACMEHOME/lighttpd.log"
 EOF
 ) >$ACMEHOME/lighttpd.conf
 
+log "Stopping gui service."
+if [ -e "/var/run/lighttpd.pid" ]
+then
+    kill_and_wait $(cat /var/run/lighttpd.pid)
+fi
+
+log "Starting temporary acme challenge service."
 /usr/sbin/lighttpd -f $ACMEHOME/lighttpd.conf
 
 /sbin/iptables -I INPUT 1 -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 $ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME --local-address $WANIP --keypath /tmp/server.key --fullchainpath /tmp/full.cer --reloadcmd /config/scripts/reload.acme.sh
 /sbin/iptables -D INPUT 1
 
+log "Stopping temporary acme challenge service."
 if [ -e "$ACMEHOME/lighttpd.pid" ]
 then
-    kill -s INT $(cat $ACMEHOME/lighttpd.pid)
+    kill_and_wait $(cat $ACMEHOME/lighttpd.pid)
 fi
+
+log "Starting gui service."
+/usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf
