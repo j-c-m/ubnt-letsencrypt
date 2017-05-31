@@ -46,6 +46,11 @@ done
 ACMEHOME=/config/.acme.sh
 WANIP=$(ip addr show $WAN | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 
+if [ -z "$WANIP" ]; then
+    log "Unable to determine WAN IP."
+    exit 1
+fi
+
 mkdir -p $ACMEHOME/webroot
 
 (
