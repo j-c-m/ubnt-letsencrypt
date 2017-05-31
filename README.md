@@ -69,6 +69,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/script
 
 ## Changelog
 
+    20170530 - Check wan ip
     20170417 - Stop gui service during challenge
     20170320 - Add multiple name support
     20170317 - Change from standalone to webroot auth using lighttpd
