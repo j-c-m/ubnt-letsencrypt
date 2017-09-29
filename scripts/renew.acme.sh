@@ -65,24 +65,24 @@ accesslog.filename = "$ACMEHOME/lighttpd.log"
 EOF
 ) >$ACMEHOME/lighttpd.conf
 
-log "Stopping gui service."
+log "Stopping GUI service."
 if [ -e "/var/run/lighttpd.pid" ]
 then
     kill_and_wait $(cat /var/run/lighttpd.pid)
 fi
 
-log "Starting temporary acme challenge service."
+log "Starting temporary ACME challenge service."
 /usr/sbin/lighttpd -f $ACMEHOME/lighttpd.conf
 
 /sbin/iptables -I INPUT 1 -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 $ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME --local-address $WANIP --keypath /tmp/server.key --fullchainpath /tmp/full.cer --reloadcmd /config/scripts/reload.acme.sh
 /sbin/iptables -D INPUT 1
 
-log "Stopping temporary acme challenge service."
+log "Stopping temporary ACME challenge service."
 if [ -e "$ACMEHOME/lighttpd.pid" ]
 then
     kill_and_wait $(cat $ACMEHOME/lighttpd.pid)
 fi
 
-log "Starting gui service."
+log "Starting GUI service."
 /usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf
