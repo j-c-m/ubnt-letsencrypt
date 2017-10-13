@@ -75,7 +75,9 @@ log "Starting temporary ACME challenge service."
 /usr/sbin/lighttpd -f $ACMEHOME/lighttpd.conf
 
 /sbin/iptables -I INPUT 1 -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
-$ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME --local-address $WANIP --keypath /tmp/server.key --fullchainpath /tmp/full.cer --reloadcmd /config/scripts/reload.acme.sh
+mkdir -p /config/ssl
+$ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME \
+--reloadcmd "cat $ACMEHOME/${DOMAIN[0]}/fullchain.cer $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.key > /config/ssl/server.pem"
 /sbin/iptables -D INPUT 1
 
 log "Stopping temporary ACME challenge service."
