@@ -10,9 +10,8 @@ to generate a valid SSL certificate for the EdgeRouter.
 ```
 mkdir -p /config/.acme.sh
 curl -o /config/.acme.sh/acme.sh https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh
-curl -o /config/scripts/reload.acme.sh https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/scripts/reload.acme.sh
 curl -o /config/scripts/renew.acme.sh https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/scripts/renew.acme.sh
-chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/scripts/renew.acme.sh
+chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
 ```
 
 ## Configuration
@@ -69,6 +68,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/reload.acme.sh /config/script
 
 ## Changelog
 
+    20171013 - Remove reload.acme.sh
     20170530 - Check wan ip
     20170417 - Stop gui service during challenge
     20170320 - Add multiple name support
