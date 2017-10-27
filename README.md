@@ -33,6 +33,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
 
     ```
     set service gui cert-file /config/ssl/server.pem
+    set service-gui ca-file /config/ssl/ca.pem
     ```
 
 3. Configure task scheduler to renew certificate automatically.
@@ -68,6 +69,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
 
 ## Changelog
 
+    20171028 - Add ca.pem for complete certificate chain
     20171013 - Remove reload.acme.sh
     20170530 - Check wan ip
     20170417 - Stop gui service during challenge
