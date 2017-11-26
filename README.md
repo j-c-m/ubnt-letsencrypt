@@ -70,6 +70,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
 ## Changelog
 
     20171126 - Add ca.pem for complete certificate chain
+             - Temporarily disable http port forwarding during renew
     20171013 - Remove reload.acme.sh
     20170530 - Check wan ip
     20170417 - Stop gui service during challenge
