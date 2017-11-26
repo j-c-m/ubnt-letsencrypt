@@ -77,7 +77,7 @@ log "Starting temporary ACME challenge service."
 /sbin/iptables -I INPUT 1 -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 mkdir -p /config/ssl
 $ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME \
---reloadcmd "cat $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.cer $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.key > /config/ssl/server.pem; cat $ACMEHOME/${DOMAIN[0]}/ca.cer > /config/ssl/ca.pem"
+--reloadcmd "cat $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.cer $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.key > /config/ssl/server.pem; cp $ACMEHOME/${DOMAIN[0]}/ca.cer /config/ssl/ca.pem"
 /sbin/iptables -D INPUT 1
 
 log "Stopping temporary ACME challenge service."
