@@ -21,6 +21,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
   * 192.168.1.1 - LAN IP of Router
   * eth0 - WAN device
 * Configure DNS record for subdomain.example.com to your public WAN IP.
+* Temporarily disable port forwarding for port 80 if you have configured it before.
 * Connect via ssh to your EdgeRouter and enter configuration mode.
 
 1. Setup static host mapping for FQDN to the LAN IP.
