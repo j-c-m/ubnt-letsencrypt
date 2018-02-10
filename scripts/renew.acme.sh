@@ -44,7 +44,7 @@ for val in "${DOMAIN[@]}"; do
 done
 
 ACMEHOME=/config/.acme.sh
-WANIP=$(ip addr show $WAN | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+WANIP=$(ip addr show $WAN | grep "inet\b" | awk '{print $2}' | head -n 1 | cut -d/ -f1)
 
 if [ -z "$WANIP" ]; then
     log "Unable to determine WAN IP."
