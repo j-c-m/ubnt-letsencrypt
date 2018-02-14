@@ -19,7 +19,6 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
 * In the steps below replace/verify the following:
   * subdomain.example.com - FQDN
   * 192.168.1.1 - LAN IP of Router
-  * eth0 - WAN device
 * Configure DNS record for subdomain.example.com to your public WAN IP.
 * Connect via ssh to your EdgeRouter and enter configuration mode.
 
@@ -41,19 +40,19 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
     ```
     set system task-scheduler task renew.acme executable path /config/scripts/renew.acme.sh
     set system task-scheduler task renew.acme interval 1d
-    set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -i eth0'
+    set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com'
     ```
 
     You can include additional common names for your certificate, so long as they resolve to the same WAN address:
 
     ```
-    set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -d subdomain2.example.com -i eth0'
+    set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -d subdomain2.example.com'
     ```
 
 4. Initialize your certificate.
 
     ```
-    sudo /config/scripts/renew.acme.sh -d subdomain.example.com -i eth0
+    sudo /config/scripts/renew.acme.sh -d subdomain.example.com
     ```
 
     If you included multiple names in step 4, you'll need to include any additional names here as well.
@@ -69,6 +68,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
 
 ## Changelog
 
+    20180213 - Deprecate -i <wandev> option
     20171126 - Add ca.pem for complete certificate chain
              - Temporarily disable http port forwarding during renew
     20171013 - Remove reload.acme.sh
