@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: $0 -d <mydomain.com> [-d <additionaldomain.com>] -i <wandev>" 1>&2; exit 1;
+    echo "Usage: $0 -d <mydomain.com> [-d <additionaldomain.com>]" 1>&2; exit 1;
 }
 
 kill_and_wait() {
@@ -25,7 +25,7 @@ log() {
 while getopts "hd:i:" opt; do
     case $opt in
         d) DOMAIN+=("$OPTARG");;
-        i) WAN=$OPTARG;;
+        i) ;;
         *)
           usage
           ;;
@@ -34,7 +34,7 @@ done
 shift $((OPTIND -1))
 
 # check for required parameters
-if [ ${#DOMAIN[@]} -eq 0 ] || [ -z ${WAN+x} ]; then
+if [ ${#DOMAIN[@]} -eq 0 ]; then
     usage
 fi
 
@@ -44,12 +44,6 @@ for val in "${DOMAIN[@]}"; do
 done
 
 ACMEHOME=/config/.acme.sh
-WANIP=$(ip addr show $WAN | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-
-if [ -z "$WANIP" ]; then
-    log "Unable to determine WAN IP."
-    exit 1
-fi
 
 mkdir -p $ACMEHOME/webroot
 
@@ -58,7 +52,6 @@ cat <<EOF
 server.modules = ( "mod_accesslog" )
 server.document-root = "$ACMEHOME/webroot"
 server.port = 80
-server.bind = "$WANIP"
 server.pid-file = "$ACMEHOME/lighttpd.pid"
 server.errorlog = "/dev/null"
 accesslog.filename = "$ACMEHOME/lighttpd.log"
