@@ -52,6 +52,8 @@ cat <<EOF
 server.modules = ( "mod_accesslog" )
 server.document-root = "$ACMEHOME/webroot"
 server.port = 80
+server.bind = "0.0.0.0"
+\$SERVER["socket"] == "[::]:80" {  }
 server.pid-file = "$ACMEHOME/lighttpd.pid"
 server.errorlog = "/dev/null"
 accesslog.filename = "$ACMEHOME/lighttpd.log"
@@ -68,11 +70,13 @@ log "Starting temporary ACME challenge service."
 /usr/sbin/lighttpd -f $ACMEHOME/lighttpd.conf
 
 /sbin/iptables -I INPUT 1 -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
+/sbin/ip6tables -I INPUT 1 -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 /sbin/iptables -t nat -I PREROUTING 1 -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 mkdir -p /config/ssl
 $ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME \
 --reloadcmd "cat $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.cer $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.key > /config/ssl/server.pem; cp $ACMEHOME/${DOMAIN[0]}/ca.cer /config/ssl/ca.pem"
 /sbin/iptables -D INPUT 1
+/sbin/ip6tables -D INPUT 1
 /sbin/iptables -t nat -D PREROUTING 1
 
 log "Stopping temporary ACME challenge service."
