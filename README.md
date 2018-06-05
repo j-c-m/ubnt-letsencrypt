@@ -68,6 +68,7 @@ chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
 
 ## Changelog
 
+    20180605 - IPv6 support
     20180213 - Deprecate -i <wandev> option
     20171126 - Add ca.pem for complete certificate chain
              - Temporarily disable http port forwarding during renew
