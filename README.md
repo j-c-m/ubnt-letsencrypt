@@ -9,9 +9,9 @@ to generate a valid SSL certificate for the EdgeRouter.
 ## Install acme.sh & scripts
 ```
 mkdir -p /config/.acme.sh /config/scripts
-curl -o /config/.acme.sh/acme.sh https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh
-curl -o /config/scripts/renew.acme.sh https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/scripts/renew.acme.sh
-chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
+sudo curl -o /config/.acme.sh/acme.sh https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh
+sudo curl -o /config/scripts/renew.acme.sh https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/scripts/renew.acme.sh
+sudo chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
 ```
 
 ## Configuration
