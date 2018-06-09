@@ -7,11 +7,10 @@ to generate a valid SSL certificate for the EdgeRouter.
 * 100% /config driven, does not require modification to EdgeOS system files
 
 ## Install acme.sh & scripts
+
+* Connect via ssh to your EdgeRouter and execute the following command.
 ```
-mkdir -p /config/.acme.sh /config/scripts
-sudo curl -o /config/.acme.sh/acme.sh https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh
-sudo curl -o /config/scripts/renew.acme.sh https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/scripts/renew.acme.sh
-sudo chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
+curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh | sudo bash
 ```
 
 ## Configuration
@@ -68,6 +67,7 @@ sudo chmod 755 /config/.acme.sh/acme.sh /config/scripts/renew.acme.sh
 
 ## Changelog
 
+    20180609 - Install script
     20180605 - IPv6 support
     20180213 - Deprecate -i <wandev> option
     20171126 - Add ca.pem for complete certificate chain
