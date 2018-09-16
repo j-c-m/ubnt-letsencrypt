@@ -10,7 +10,7 @@ to generate a valid SSL certificate for the EdgeRouter.
 
 * Connect via ssh to your EdgeRouter and execute the following command.
 ```
-curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh | sudo bash
+curl https://raw.githubusercontent.com/dotsam/ubnt-letsencrypt/use-hooks/install.sh | sudo bash
 ```
 
 ## Configuration
@@ -21,40 +21,37 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
 * Configure DNS record for subdomain.example.com to your public WAN IP.
 * Connect via ssh to your EdgeRouter and enter configuration mode.
 
-1. Setup static host mapping for FQDN to the LAN IP.
+1. Initialize your certificate.
+
+    ```
+    sudo /config/scripts/acme/setup.sh -d subdomain.example.com
+    ```
+
+    You can include additional common names for your certificate, so long as they resolve to the same WAN address:
+    
+    ```
+    sudo /config/scripts/acme/setup.sh -d subdomain.example.com -d subdomain2.example.com
+    ```
+
+    The script will issue a certificate and prepare it for use, and then output a set of configuration commands.
+
+3. Enter congiguration commands
+
+    Enter configuration mode
+    
+    ```
+    configure
+    ```
+    
+    And copy and paste the commands that were output by the setup script
+
+2. Setup static host mapping for FQDN to the LAN IP.
+
+    If you (wisely) haven't exposed your web interface to the internet at large, you'll need to set a static host mapping so you can access the GUI internally using this domain name
 
     ```
     set system static-host-mapping host-name subdomain.example.com inet 192.168.1.1
     ```
-
-2. Configure cert-file location for gui.
-
-    ```
-    set service gui cert-file /config/ssl/server.pem
-    set service gui ca-file /config/ssl/ca.pem
-    ```
-
-3. Configure task scheduler to renew certificate automatically.
-
-    ```
-    set system task-scheduler task renew.acme executable path /config/scripts/renew.acme.sh
-    set system task-scheduler task renew.acme interval 1d
-    set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com'
-    ```
-
-    You can include additional common names for your certificate, so long as they resolve to the same WAN address:
-
-    ```
-    set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -d subdomain2.example.com'
-    ```
-
-4. Initialize your certificate.
-
-    ```
-    sudo /config/scripts/renew.acme.sh -d subdomain.example.com
-    ```
-
-    If you included multiple names in step 4, you'll need to include any additional names here as well.
 
 5. Commit and save your configuration.
 
@@ -67,6 +64,7 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
 
 ## Changelog
 
+    20180915 - Convert script to use acme.sh hooks/commands and built-in --cron command so GUI isn't stopped/started when certs aren't being renewed (dotsam)
     20180609 - Install script
     20180605 - IPv6 support
     20180213 - Deprecate -i <wandev> option
