@@ -43,11 +43,11 @@ curl https://raw.githubusercontent.com/dotsam/ubnt-letsencrypt/use-hooks/install
     configure
     ```
     
-    And copy and past the commands that were output by the setup script
+    And copy and paste the commands that were output by the setup script
 
 2. Setup static host mapping for FQDN to the LAN IP.
 
-    If you (wisely) haven't exposed your web interface to the internet at large, you'll need to set a static host mapping so you can access the GUI using your shiny new certificate.
+    If you (wisely) haven't exposed your web interface to the internet at large, you'll need to set a static host mapping so you can access the GUI internally using this domain name
 
     ```
     set system static-host-mapping host-name subdomain.example.com inet 192.168.1.1
