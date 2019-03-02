@@ -48,25 +48,26 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
     set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -d subdomain2.example.com'
     ```
 
-4. Initialize your certificate.
-
-    ```
-    sudo /config/scripts/renew.acme.sh -d subdomain.example.com
-    ```
-
-    If you included multiple names in step 4, you'll need to include any additional names here as well.
-
-5. Commit and save your configuration.
+4. Commit and save your configuration.
 
     ```
     commit
     save
     ```
 
+5. Initialize your certificate.
+
+    ```
+    sudo /config/scripts/renew.acme.sh -d subdomain.example.com
+    ```
+
+    If you included multiple names in step 3, you'll need to include any additional names here as well.
+    
 6. Accesss your router by going to <https://subdomain.example.com>
 
 ## Changelog
 
+    20190302 - Changed step order in README to correctly init 
     20180609 - Install script
     20180605 - IPv6 support
     20180213 - Deprecate -i <wandev> option
