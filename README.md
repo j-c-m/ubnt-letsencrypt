@@ -53,6 +53,7 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
     ```
     commit
     save
+    exit
     ```
 
 5. Initialize your certificate.
@@ -62,7 +63,7 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
     ```
 
     If you included multiple names in step 3, you'll need to include any additional names here as well.
-    
+
 6. Accesss your router by going to <https://subdomain.example.com>
 
 ## Changelog
