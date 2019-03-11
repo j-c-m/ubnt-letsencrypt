@@ -19,22 +19,40 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
   * subdomain.example.com - FQDN
   * 192.168.1.1 - LAN IP of Router
 * Configure DNS record for subdomain.example.com to your public WAN IP.
-* Connect via ssh to your EdgeRouter and enter configuration mode.
+* Connect via ssh to your EdgeRouter.
 
-1. Setup static host mapping for FQDN to the LAN IP.
+1. Initialize your certificate.
+
+    ```
+    sudo /config/scripts/renew.acme.sh -d subdomain.example.com
+    ```
+
+    You can include additional common names for your certificate, so long as they resolve to the same WAN address:
+
+    ```
+    sudo /config/scripts/renew.acme.sh -d subdomain.example.com -d subdomain2.example.com
+    ```
+
+2. Enter configuration mode.
+
+    ```
+    configure
+    ```
+
+3. Setup static host mapping for FQDN to the LAN IP.
 
     ```
     set system static-host-mapping host-name subdomain.example.com inet 192.168.1.1
     ```
 
-2. Configure cert-file location for gui.
+4. Configure cert-file location for gui.
 
     ```
     set service gui cert-file /config/ssl/server.pem
     set service gui ca-file /config/ssl/ca.pem
     ```
 
-3. Configure task scheduler to renew certificate automatically.
+5. Configure task scheduler to renew certificate automatically.
 
     ```
     set system task-scheduler task renew.acme executable path /config/scripts/renew.acme.sh
@@ -42,13 +60,13 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
     set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com'
     ```
 
-    You can include additional common names for your certificate, so long as they resolve to the same WAN address:
+    If you included multiple names in step 1, you'll need to include any additional names here as well.
 
     ```
     set system task-scheduler task renew.acme executable arguments '-d subdomain.example.com -d subdomain2.example.com'
     ```
 
-4. Commit and save your configuration.
+6. Commit, save and exit configuration mode.
 
     ```
     commit
@@ -56,19 +74,12 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
     exit
     ```
 
-5. Initialize your certificate.
 
-    ```
-    sudo /config/scripts/renew.acme.sh -d subdomain.example.com
-    ```
-
-    If you included multiple names in step 3, you'll need to include any additional names here as well.
-
-6. Accesss your router by going to <https://subdomain.example.com>
+7. Accesss your router by going to <https://subdomain.example.com>
 
 ## Changelog
 
-    20190302 - Changed step order in README to correctly init 
+    20190311 - Initialize certificate first outside of configuration mode
     20180609 - Install script
     20180605 - IPv6 support
     20180213 - Deprecate -i <wandev> option
