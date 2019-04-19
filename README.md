@@ -73,9 +73,14 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
     save
     exit
     ```
+7. Replace the self signed certificate of lighttpd with the one you just created:
+   
+   ```
+   sudo cp /config/ssl/server.pem /etc/lighttpd/server.pem
+   sudo service restart lighttpd
+   ```
 
-
-7. Accesss your router by going to <https://subdomain.example.com>
+8. Accesss your router by going to <https://subdomain.example.com>
 
 ## Changelog
 
