@@ -79,6 +79,7 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
 
 ## Changelog
 
+    20191022 - Prevent sudo error
     20190311 - Initialize certificate first outside of configuration mode
     20180609 - Install script
     20180605 - IPv6 support
