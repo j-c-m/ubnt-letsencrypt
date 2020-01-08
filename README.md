@@ -10,7 +10,7 @@ to generate a valid SSL certificate for the EdgeRouter.
 
 * Connect via ssh to your EdgeRouter and execute the following command.
 ```
-curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh | sudo bash
+curl https://raw.githubusercontent.com/ozphb/ubnt-letsencrypt/master/install.sh | sudo bash
 ```
 
 ## Configuration
