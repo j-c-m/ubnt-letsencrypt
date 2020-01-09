@@ -81,8 +81,7 @@ $ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME \
 /sbin/iptables -t nat -D PREROUTING 1
 
 log "Stopping temporary ACME challenge service."
-if [ -e "$ACMEHOME/lighttpd.pid" ]
-then
+if [ -e "$ACMEHOME/lighttpd.pid" ]; then
     kill_and_wait $(cat $ACMEHOME/lighttpd.pid)
 fi
 
