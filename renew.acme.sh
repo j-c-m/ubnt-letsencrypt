@@ -5,13 +5,12 @@ usage() {
 }
 
 kill_and_wait() {
-
     local pid=$1
     [ -z $pid ] && return
 
     kill -s INT $pid 2> /dev/null
     while kill -s 0 $pid 2> /dev/null; do
-    sleep 1
+        sleep 1
     done
 }
 
@@ -62,11 +61,7 @@ EOF
 ) >$ACMEHOME/lighttpd.conf
 
 log "Stopping GUI service."
-systemctl stop lighttpd.service
-#wait 10
-
-if [ -e "/var/run/lighttpd.pid" ]
-then
+if [ -e "/var/run/lighttpd.pid" ]; then
     kill_and_wait $(cat /var/run/lighttpd.pid)
 fi
 
@@ -86,12 +81,14 @@ $ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME \
 /sbin/iptables -t nat -D PREROUTING 1
 
 log "Stopping temporary ACME challenge service."
-
 if [ -e "$ACMEHOME/lighttpd.pid" ]
 then
     kill_and_wait $(cat $ACMEHOME/lighttpd.pid)
 fi
 
 log "Starting GUI service."
-#/usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf
-systemctl start lighttpd.service
+if [ -x "/bin/systemctl" ]; then
+    /bin/systemctl start lighttpd.service
+else
+    /usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf
+fi
