@@ -79,6 +79,7 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
 
 ## Changelog
 
+    20200419 - Use SIGTERM for GUI service stop
     20200109 - Use systemctl on 2.0 to start GUI service
     20191022 - Prevent sudo error
     20190311 - Initialize certificate first outside of configuration mode

@@ -8,7 +8,7 @@ kill_and_wait() {
     local pid=$1
     [ -z $pid ] && return
 
-    kill -s INT $pid 2> /dev/null
+    kill $pid 2> /dev/null
     while kill -s 0 $pid 2> /dev/null; do
         sleep 1
     done
