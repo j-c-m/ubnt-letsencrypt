@@ -79,6 +79,7 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
 
 ## Changelog
 
+    20210622 - Update option handling to pass --debug and --force to acme.sh
     20210621 - Default to Let's Encrypt CA
              - Add -f to force renew
     20200419 - Use SIGTERM for GUI service stop

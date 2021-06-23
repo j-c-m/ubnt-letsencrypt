@@ -1,7 +1,13 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: $0 -d <mydomain.com> [-d <additionaldomain.com>]" 1>&2; exit 1;
+    echo "Usage: $0 -d <mydomain.com> [-d <additionaldomain.com>] [options ...]
+Options:
+    -h, --help          Show this help message.
+    -d, --domain        Specifies domain for cert, allowed multiple times.
+    -f, --force         Force cert renewal.
+    --debug [0|1|2|3]   Output debug info. Defaults to 1 if argument is omitted.
+" 1>&2; exit 1;
 }
 
 kill_and_wait() {
@@ -21,21 +27,44 @@ log() {
     fi
 }
 
-# first parse our options
-while getopts "hd:fi:" opt; do
-    case $opt in
-        d) DOMAIN+=("$OPTARG");;
-        f) FORCE="--force";;
-        i) ;;
+while [ ${#} -gt 0 ]; do
+    case "${1}" in
+        -h|--help)
+            usage
+            ;;
+        -f|--force)
+            FORCE="--force"
+            ;;
+        -i)
+            shift
+            ;;
+        -d|--domain)
+            if [ -z "$2" ] || [ "${2:0:1}" = "-" ]; then
+                echo "Domain required"
+                usage
+            fi
+            DOMAIN+=("$2")
+            shift
+            ;;
+        --debug)
+            if [ -z "$2" ] || [ "${2:0:1}" = "-" ]; then
+                DEBUG="--debug 1"
+            else
+                DEBUG="--debug ${2}"
+                shift
+            fi
+            ;;
         *)
-          usage
-          ;;
+            echo "Unknown parameter : ${1}"
+            usage
+            ;;
     esac
+    shift 1
 done
-shift $((OPTIND -1))
 
 # check for required parameters
 if [ ${#DOMAIN[@]} -eq 0 ]; then
+    echo "Domain required"
     usage
 fi
 
@@ -77,7 +106,7 @@ mkdir -p /config/ssl
 unset SUDO_COMMAND
 $ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME \
 --reloadcmd "cat $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.cer $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.key > /config/ssl/server.pem; cp $ACMEHOME/${DOMAIN[0]}/ca.cer /config/ssl/ca.pem" \
---server letsencrypt ${FORCE}
+--server letsencrypt ${FORCE} ${DEBUG}
 /sbin/iptables -D INPUT -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 /sbin/ip6tables -D INPUT -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 /sbin/iptables -t nat -D PREROUTING 1
