@@ -111,8 +111,8 @@ mkdir -p /config/ssl
 # trick sudo detection in acme.sh
 unset SUDO_COMMAND
 $ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME \
---reloadcmd "cat $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.cer $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.key > /config/ssl/server.pem; cp $ACMEHOME/${DOMAIN[0]}/ca.cer /config/ssl/ca.pem" \
-${STAGING} ${FORCE} ${DEBUG} --keylength 2048
+--reloadcmd "cat \$CERT_PATH \$CERT_KEY_PATH > /config/ssl/server.pem; cp \$CA_CERT_PATH /config/ssl/ca.pem" \
+${STAGING} ${FORCE} ${DEBUG}
 /sbin/iptables -D INPUT -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 /sbin/ip6tables -D INPUT -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 /sbin/iptables -t nat -D PREROUTING 1
