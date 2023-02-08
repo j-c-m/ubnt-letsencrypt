@@ -7,6 +7,7 @@ Options:
     -d, --domain        Specifies domain for cert, allowed multiple times.
     -f, --force         Force cert renewal.
     --debug [0|1|2|3]   Output debug info. Defaults to 1 if argument is omitted.
+    --staging, --test   Use staging server, for testing.
 " 1>&2; exit 1;
 }
 
@@ -26,6 +27,8 @@ log() {
         printf -- "%s %s\n" "[$(date)]" "$1"
     fi
 }
+
+STAGING="--server letsencrypt"
 
 while [ ${#} -gt 0 ]; do
     case "${1}" in
@@ -53,6 +56,9 @@ while [ ${#} -gt 0 ]; do
                 DEBUG="--debug ${2}"
                 shift
             fi
+            ;;
+        --staging|--test)
+            STAGING="--staging"
             ;;
         *)
             echo "Unknown parameter : ${1}"
@@ -106,7 +112,7 @@ mkdir -p /config/ssl
 unset SUDO_COMMAND
 $ACMEHOME/acme.sh --issue $DOMAINARG -w $ACMEHOME/webroot --home $ACMEHOME \
 --reloadcmd "cat $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.cer $ACMEHOME/${DOMAIN[0]}/${DOMAIN[0]}.key > /config/ssl/server.pem; cp $ACMEHOME/${DOMAIN[0]}/ca.cer /config/ssl/ca.pem" \
---server letsencrypt ${FORCE} ${DEBUG}
+${STAGING} ${FORCE} ${DEBUG} --keylength 2048
 /sbin/iptables -D INPUT -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 /sbin/ip6tables -D INPUT -p tcp -m comment --comment TEMP_LETSENCRYPT -m tcp --dport 80 -j ACCEPT
 /sbin/iptables -t nat -D PREROUTING 1
