@@ -6,7 +6,7 @@ to generate a valid SSL certificate for the EdgeRouter.
 * Does not ever expose the admin GUI to the internet
 * 100% /config driven, does not require modification to EdgeOS system files
 
-## Install acme.sh & scripts
+## Install/Update acme.sh & scripts
 
 * Connect via ssh to your EdgeRouter and execute the following command.
 ```
@@ -79,6 +79,7 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
 
 ## Changelog
 
+    20231112 - Install script now fetches updated cacert bundle for curl
     20230208 - Update option handling to pass --staging and --test to acme.sh
                Update reload command to use vars, fixes ECDSA key issues
     20220624 - Update acme.sh repo to https://github.com/acmesh-official/acme.sh
