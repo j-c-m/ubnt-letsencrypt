@@ -79,6 +79,7 @@ curl https://raw.githubusercontent.com/j-c-m/ubnt-letsencrypt/master/install.sh 
 
 ## Changelog
 
+    20231119 - Update install script to create ssl directory
     20231112 - Install script now fetches updated cacert bundle for curl
     20230208 - Update option handling to pass --staging and --test to acme.sh
                Update reload command to use vars, fixes ECDSA key issues
